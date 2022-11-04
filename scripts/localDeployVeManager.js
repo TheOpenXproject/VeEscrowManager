@@ -116,7 +116,6 @@ async function main() {
     var FunctionCalls = [
     "function initialMint(address _recipient)",
     "function setRedemptionReceiver(address _receiver)",
-    //"function create_lock_for(uint _value, uint _lock_duration, address _to) external nonreentrant returns (uint)" NOPE
     ]
     var Arguements = [
     	[VeManager.address],

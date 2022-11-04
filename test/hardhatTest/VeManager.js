@@ -4,7 +4,11 @@ const {VeManagerSDK} = require("../../VeManagerSDK")
 
 const startTime = parseFloat((new Date().getTime()/1000).toFixed(0))
 
+//here setup script
 
+
+/*VeManager also own velo for demonstration and simplicity sake
+*/
 describe("VeManager tests", function () {
 	before(async function () {
 	this.signers = await ethers.getSigners()
@@ -67,6 +71,9 @@ describe("VeManager tests", function () {
 
     await this.Velo.setMinter(this.VeManager.address);
 
+
+    //this is needed to init sdk (can work with any contract loaded through ethers) 
+    // address => contractInstance
  	const addressesMapping = {
 		[this.Velo.address]: Velo,
 		[this.VotingEscrow.address]: VotingEscrow,
@@ -75,33 +82,36 @@ describe("VeManager tests", function () {
 
     this.SDK = new VeManagerSDK(addressesMapping, this.VeManager.address)
 
+
+    ///Calls/targets/arguments
     var Targets = [this.Velo.address, this.Velo.address]
     var FunctionCalls = [
     "function initialMint(address _recipient)",
     "function setRedemptionReceiver(address _receiver)",
     ]
-
     var Arguements = [
     	[this.VeManager.address],
     	[this.signers[1].address]
     ]
-    
+    //into sdk go brrrrr (im tired rn)
     const encodedCalls = this.SDK.encodeBatchedTx(Targets, FunctionCalls, Arguements)
     //console.log(encodedCalls)
 
-
+    //execute array of calls(bytes[]) to Targets(address[])
 	await this.VeManager.execute(Targets, encodedCalls, false)
-
+	//is meant to drain any tokens(exception with velo which allows for a 50% withdrawal once a week for pegg)
     await this.VeManager.drain([this.Velo.address])
 
 	await this.Velo.approve(this.VotingEscrow.address, ethers.utils.parseUnits("3000000"))
-
+	//create locks for the veManager
     await this.VotingEscrow.create_lock_for(ethers.utils.parseUnits("1500000"), 4 * 365 * 86400, this.VeManager.address)
     await this.VotingEscrow.create_lock_for(ethers.utils.parseUnits("1500000"), 4 * 365 * 86400, this.VeManager.address)
 
 
 
 	});
+
+	//Tests
 	it("NFT bal of veManager should not be 0", async function () {
 		var nftBal = await this.VotingEscrow.balanceOf(this.VeManager.address)
     	expect(nftBal.toNumber()).to.not.be.equal(0);
@@ -283,12 +293,10 @@ it("safeTransferFrom with bytes should revert", async function () {
 
    it("Calling saved calls for deposits on nft 1 and 2 should work", async function () {
 	var nftBalBefore = await this.VotingEscrow.balanceOfNFT(1)
-
    	await expect(this.VeManager.executeSaved(0)).to.not.be.revertedWith("Not Allowed");
     await expect(this.VeManager.executeSaved(0)).to.not.be.revertedWith("Call failed");
     var nftBalAfter = await this.VotingEscrow.balanceOfNFT(1)
     expect(nftBalBefore.lt(nftBalAfter)).to.be.equal(true)
-
 
   });
 

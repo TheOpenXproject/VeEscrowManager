@@ -1,55 +1,67 @@
-# Velodrome
+# Hello Velodrome
 
-This repo contains the contracts for Velodrome Finance, an AMM on Optimism inspired by Solidly.
 
-## Testing
+First of all hello.
 
-This repo uses both Foundry (for Solidity testing) and Hardhat (for deployment).
+(Context of veManager)
+for the sake of doing this simply veMAnager in managing velo token in the scripts
+built an sdk to encode and decode submited tx
 
-Foundry Setup
+(fetching of onchain data using multicall shouldnt be too hard) :D
 
-```ml
-forge init
-forge build
-forge test
-```
 
-Hardhat Setup
+### Step 1
 
-```ml
-npm i
-npx hardhat compile
-```
+run this in veVeloSDK DIR (might need an npm install)
 
-## Deployment
+npm run build 
 
-This project's deployment process uses [Hardhat tasks](https://hardhat.org/guides/create-task.html). The scripts are found in `tasks/`.
+### Step 2
 
-Deployment contains 3 steps:
+install npm packages in main directory
 
-1. `npx hardhat deploy:op` which deploys the core contracts, along with RedemptionReceiver, to Optimism.
+npm install
 
-2. `npx hardhat deploy:ftm` which deploys the RedemptionSender contract to Fantom. The RedemptionReceiver address from Step 1 should be recorded in `deployed.ts` prior.
 
-## Security
+### Step 3
 
-The Velodrome team engaged with Code 4rena for a security review. The results of that audit are available [here](https://code4rena.com/reports/2022-05-velodrome/). Our up-to-date security findings are located on our website [here](https://docs.velodrome.finance/security).
+you can either run the contract on hardhat network using
 
-## Contracts
+npx hardhat run scripts/localDeployVeManager.js 
 
-| Name               | Address                                                                                                                               |
-| :----------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
-| WETH               | [0x4200000000000000000000000000000000000006](https://optimistic.etherscan.io/address/0x4200000000000000000000000000000000000006#code) |
-| Velo               | [0x3c8B650257cFb5f272f799F5e2b4e65093a11a05](https://optimistic.etherscan.io/address/0x3c8B650257cFb5f272f799F5e2b4e65093a11a05#code) |
-| MerkleClaim        | [0x00D59BC35174C3b250Dd92a363495d38C8777a49](https://optimistic.etherscan.io/address/0x00D59BC35174C3b250Dd92a363495d38C8777a49#code) |
-| RedemptionSender   | [0x9809fB94eED086F9529df00d6f125Bf25Ee84A93](https://ftmscan.com/address/0x9809fB94eED086F9529df00d6f125Bf25Ee84A93#code)             |
-| RedemptionReceiver | [0x846e822e9a00669dcC647079d7d625d2cd25A951](https://optimistic.etherscan.io/address/0x846e822e9a00669dcC647079d7d625d2cd25A951#code) |
-| PairFactory        | [0x25CbdDb98b35ab1FF77413456B31EC81A6B6B746](https://optimistic.etherscan.io/address/0x25CbdDb98b35ab1FF77413456B31EC81A6B6B746#code) |
-| BribeFactory       | [0xA84EA94Aa705F7d009CDDF2a60f65c0d446b748E](https://optimistic.etherscan.io/address/0xA84EA94Aa705F7d009CDDF2a60f65c0d446b748E#code) |
-| GaugeFactory       | [0xC5be2c918EB04B091962fDF095A217A55CFA42C5](https://optimistic.etherscan.io/address/0xC5be2c918EB04B091962fDF095A217A55CFA42C5#code) |
-| Voter              | [0x09236cfF45047DBee6B921e00704bed6D6B8Cf7e](https://optimistic.etherscan.io/address/0x09236cfF45047DBee6B921e00704bed6D6B8Cf7e#code) |
-| VeloGovernor       | [0x64DD805aa894dc001f8505e000c7535179D96C9E](https://optimistic.etherscan.io/address/0x64DD805aa894dc001f8505e000c7535179D96C9E#code) |
-| VotingEscrow       | [0x9c7305eb78a432ced5C4D14Cac27E8Ed569A2e26](https://optimistic.etherscan.io/address/0x9c7305eb78a432ced5C4D14Cac27E8Ed569A2e26#code) |
-| VeArtProxy         | [0x5F2f6721Ca0C5AC522BC875fA3F09bF693dcFa1D](https://optimistic.etherscan.io/address/0x5F2f6721Ca0C5AC522BC875fA3F09bF693dcFa1D#code) |
-| RewardsDistributor | [0x5d5Bea9f0Fc13d967511668a60a3369fD53F784F](https://optimistic.etherscan.io/address/0x5d5Bea9f0Fc13d967511668a60a3369fD53F784F#code) |
-| Minter             | [0x3460Dc71A8863710D1C907B8d9D5DBC053a4102d](https://optimistic.etherscan.io/address/0x3460Dc71A8863710D1C907B8d9D5DBC053a4102d#code) |
+(you can add anything in ther to try whatever should be fast for debuging)
+
+### Step 3.1
+
+you can run the same tests as i did and add more to see if you can break it(doubt :D). 
+
+npx hardhat test test/hardhatTest/VeManager.js
+
+
+
+
+
+  VeManager tests
+    ✔ NFT bal of veManager should not be 0
+    ✔ balance of NFT 1 should not be 0
+    ✔ balance of NFT 2 should not be 0
+    ✔ balance of NFT 3 should be 0
+    ✔ create_lock_for should revert
+    ✔ transfer should revert
+    ✔ setApprovalForAll should revert
+    ✔ approve should revert
+    ✔ safeTransferFrom should revert
+    ✔ safeTransferFrom with bytes should revert
+    ✔ transferFrom should revert
+    ✔ deposits for NFT 1 and 2 simultaneously should be alright (147ms)
+    ✔ Emergency withdrawal should revert
+    ✔ Emergency withdrawal should revert when allowed and address(0)
+    ✔ Emergency toggle should revert when Not Velo
+    ✔ Emergency Withdraw to should work when everything set adn called by OPX Multisig (117ms)
+    ✔ Setting migrator function twice in same week should fail
+    ✔ Setting migrator from OPX Multisig should fail
+    ✔ Emergency Withdraw to should NOT work when everything set and called by Velo Multisig
+    ✔ Calling saved calls for deposits on nft 1 and 2 should work (181ms)
+
+
+  20 passing (3s)
