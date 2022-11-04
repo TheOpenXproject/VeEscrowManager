@@ -1,0 +1,28 @@
+{
+  "name": "vemanager-sdk",
+  "version": "0.0.0",
+  "description": "SDK to interact with VeManager contract",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsdx build",
+    "start": "tsdx watch",
+    "test": "tsdx test",
+    "prepublishOnly": "tsdx build"
+  },
+  "module": "dist/vemanager-sdk.esm.js",
+  "dependencies": {
+    "ethers": "^5.5.4"
+  },
+  "devDependencies": {
+    "tsdx": "^0.14.1"
+  },
+  "keywords": [
+    "VeManager"
+  ],
+  "files": [
+    "dist"
+  ],
+  "author": "Alex from OpenXSwap",
+  "license": "SEE LICENSE IN LICENSE.MD"
+}
