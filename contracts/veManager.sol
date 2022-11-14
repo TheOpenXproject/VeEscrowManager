@@ -17,14 +17,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 */
 
 
-/*
-	Velo Q's
-
-	is there an onchain function i can call to get a pool or a gauge's wsxbribe addresss ?
-	
-*/
-
-
 contract veManager is Ownable {
 
 	struct CallsData{
