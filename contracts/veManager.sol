@@ -131,6 +131,7 @@ contract veManager is Ownable {
 	//Drain any rewards to Multisig
 	function drain(address[] memory tokens) public onlyOwner{
 		for(uint256 i = 0; i < tokens.length; i++) {
+			require(tokens[i] != VotedEscrow, "You fucked up mate");
 			if(tokens[i] == address(0)){ //ETH
 				uint256 bal = address(this).balance;
 				_safeTransferETH(owner(), bal);
@@ -158,7 +159,7 @@ contract veManager is Ownable {
 
 
 	//Function that checks if the function signature is an allowed call.
-	function isAllowedFunctionCall(bytes memory call) public returns(bool){
+	function isAllowedFunctionCall(bytes memory call) public view returns(bool){
 		bytes4 selector = getFunctionSig(call);
 		if(isBlacklistedFunction[selector]){
 			return false;
@@ -167,7 +168,7 @@ contract veManager is Ownable {
 		}
 	}
 	// Assembly that loads the first 4 bytes of the calldata to get the function signature. 
-	function getFunctionSig(bytes memory data) public view returns(bytes4){
+	function getFunctionSig(bytes memory data) public pure returns(bytes4){
 		bytes4 selector;
 	    assembly {
 	      	selector := mload(add(data, 32))
